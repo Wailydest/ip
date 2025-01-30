@@ -7,6 +7,7 @@ public class Sigmabot {
     static ArrayList<Task> taskList;
 
     public static void viewTaskList() {
+        System.out.println("here goes your task list:");
         for (int i = 0; i < taskList.size(); ++i) {
             System.out.println(i + 1 + ": " + taskList.get(i).toString());
         }
@@ -51,6 +52,8 @@ public class Sigmabot {
         } else {
             if (!matcher.find()) throw new IllegalArgumentException("Incorrect task type");
         }
+        System.out.println("added new task: " + taskList.get(taskList.size() - 1));
+        System.out.println("you've got " + taskList.size() + " tasks so far");
     }
     public static void main(String[] args) {
         Sigmabot.taskList = new ArrayList<Task>();
@@ -58,8 +61,8 @@ public class Sigmabot {
         System.out.println("hi! i'm your sigma bot. what's on your list?");
 
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String input = scanner.nextLine().trim();
+        while (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
             if (input.equals("bye")) break;
             if (input.equals("list")) Sigmabot.viewTaskList();
             else if (!Sigmabot.processMarkInput(input)) Sigmabot.processAddTaskInput(input);
