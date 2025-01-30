@@ -2,6 +2,9 @@ hi! i'm your sigma bot. what's on your list?
 here goes your task list:
 added new task: [T][ ] borrow book
 you've got 1 tasks so far
+[!] This task type requires parameter /by
+here goes your task list:
+1: [T][ ] borrow book
 added new task: [D][ ] return book (by: Sunday)
 you've got 2 tasks so far
 added new task: [E][ ] project meeting (from: Mon 2pm to: 4pm)
@@ -17,6 +20,8 @@ here goes your task list:
 2: [D][X] return book (by: Sunday)
 3: [E][X] project meeting (from: Mon 2pm to: 4pm)
 4: [D][ ] do homework (by: no idea :-p)
+[!] Task numbered 10 does not exist.
+[!] Incorrect mark format. Use: unmark [task number]
 here goes your task list:
 1: [T][ ] borrow book
 2: [D][X] return book (by: Sunday)

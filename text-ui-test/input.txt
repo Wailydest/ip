@@ -1,5 +1,7 @@
 list
 todo borrow book
+deadline return book
+list
 deadline return book /by Sunday
 event project meeting /from Mon 2pm /to 4pm
 list
@@ -7,6 +9,8 @@ deadline do homework /by no idea :-p
 mark 3
 mark 2
 list
+mark 10
+unmark notanumber
 unmark 1
 list
 unmark 3

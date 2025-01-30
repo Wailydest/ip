@@ -3,6 +3,8 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import exception.*;
+
 public class Sigmabot {
     static ArrayList<Task> taskList;
 
@@ -12,45 +14,51 @@ public class Sigmabot {
             System.out.println(i + 1 + ": " + taskList.get(i).toString());
         }
     }
-    public static boolean processMarkInput(String input) {
+    public static boolean processMarkInput(String input) throws SigmabotException {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length == 2
                 && (inputParts[0].equals("mark") || inputParts[0].equals("unmark"))) {
+            int taskNumber;
             try {
-                int taskNumber = Integer.parseInt(inputParts[1]);
-                if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
-                    throw new IllegalArgumentException("Task " + taskNumber + " does not exist");
-                }
-                --taskNumber;
-                if (inputParts[0].equals("mark")) taskList.get(taskNumber).mark();
-                else taskList.get(taskNumber).unmark();
-                return true;
+                taskNumber = Integer.parseInt(inputParts[1]);
             } catch (NumberFormatException e) {
-                System.out.println("invalid " + inputParts[0] + " request: " + e);
-                throw e;
+                throw new IncorrectMarkFormat(inputParts[0]);
             }
+            if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
+                throw new IncorrectTaskNumber(taskNumber);
+            }
+            --taskNumber;
+            if (inputParts[0].equals("mark")) taskList.get(taskNumber).mark();
+            else taskList.get(taskNumber).unmark();
+            return true;
         }
         return false;
     }
-    public static void processAddTaskInput(String input) {
+    public static void processAddTaskInput(String input) throws SigmabotException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
         var matcher = Pattern.compile(descriptionRegex).matcher(input);
-        if (!matcher.find()) throw new IllegalArgumentException("Incorrect task format");
+        if (!matcher.find()) throw new IncorrectTaskFormat(input);
         String description = matcher.group(1).trim();
         if (input.startsWith("deadline")) {
-            var matcherBy = Pattern.compile("/by([^/]+)").matcher(input);
-            matcherBy.find();
+            var matcherBy = Pattern.compile("/by([^/]*)").matcher(input);
+            if (!matcherBy.find()) {
+                throw new MissingParameterException("by");
+            }
             taskList.add(new Deadline(description, matcherBy.group(1).trim()));
         } else if (input.startsWith("event")) {
-            var matcherFrom = Pattern.compile("/from([^/]+)").matcher(input);
-            var matcherTo = Pattern.compile("/to([^/]+)").matcher(input);
-            matcherFrom.find();
-            matcherTo.find();
+            var matcherFrom = Pattern.compile("/from([^/]*)").matcher(input);
+            var matcherTo = Pattern.compile("/to([^/]*)").matcher(input);
+            if (!matcherFrom.find()) {
+                throw new MissingParameterException("from");
+            }
+            if (!matcherTo.find()) {
+                throw new MissingParameterException("to");
+            }
             taskList.add(new Event(description, matcherFrom.group(1).trim(), matcherTo.group(1).trim()));
         } else if (input.startsWith("todo")) {
             taskList.add(new ToDo(description));
         } else {
-            if (!matcher.find()) throw new IllegalArgumentException("Incorrect task type");
+            throw new IncorrectTaskTypeException(input);
         }
         System.out.println("added new task: " + taskList.get(taskList.size() - 1));
         System.out.println("you've got " + taskList.size() + " tasks so far");
@@ -63,9 +71,13 @@ public class Sigmabot {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
-            if (input.equals("bye")) break;
-            if (input.equals("list")) Sigmabot.viewTaskList();
-            else if (!Sigmabot.processMarkInput(input)) Sigmabot.processAddTaskInput(input);
+            try {
+                if (input.equals("bye")) break;
+                if (input.equals("list")) Sigmabot.viewTaskList();
+                else if (!Sigmabot.processMarkInput(input)) Sigmabot.processAddTaskInput(input);
+            } catch (SigmabotException e) {
+                System.out.println("[!] " + e.getMessage());
+            }
         }
 
         System.out.println("see you soon!");
