@@ -14,25 +14,38 @@ public class Sigmabot {
             System.out.println(i + 1 + ": " + taskList.get(i).toString());
         }
     }
-    public static boolean processMarkInput(String input) throws SigmabotException {
+    public static void processMarkInput(String input) throws SigmabotException {
         String[] inputParts = input.split("\\s+");
-        if (inputParts.length == 2
-                && (inputParts[0].equals("mark") || inputParts[0].equals("unmark"))) {
-            int taskNumber;
-            try {
-                taskNumber = Integer.parseInt(inputParts[1]);
-            } catch (NumberFormatException e) {
-                throw new IncorrectMarkFormat(inputParts[0]);
-            }
-            if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
-                throw new IncorrectTaskNumber(taskNumber);
-            }
-            --taskNumber;
-            if (inputParts[0].equals("mark")) taskList.get(taskNumber).mark();
-            else taskList.get(taskNumber).unmark();
-            return true;
+        if (inputParts.length != 2) throw new IncorrectMarkFormat(inputParts[0]);
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(inputParts[1]);
+        } catch (NumberFormatException e) {
+            throw new IncorrectMarkFormat(inputParts[0]);
         }
-        return false;
+        if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
+            throw new IncorrectTaskNumber(taskNumber);
+        }
+        --taskNumber;
+        if (inputParts[0].equals("mark")) taskList.get(taskNumber).mark();
+        else taskList.get(taskNumber).unmark();
+    }
+    public static void processDeleteInput(String input) throws SigmabotException {
+        String[] inputParts = input.split("\\s+");
+        if (inputParts.length != 2) throw new IncorrectDeleteFormat();
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(inputParts[1]);
+        } catch (NumberFormatException e) {
+            throw new IncorrectDeleteFormat();
+        }
+        if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
+            throw new IncorrectTaskNumber(taskNumber);
+        }
+        --taskNumber;
+        System.out.println("removed task " + (taskNumber + 1) + ": " + taskList.get(taskNumber));
+        taskList.remove(taskNumber);
+        System.out.println("you've got " + taskList.size() + " tasks so far");
     }
     public static void processAddTaskInput(String input) throws SigmabotException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
@@ -60,7 +73,7 @@ public class Sigmabot {
         } else {
             throw new IncorrectTaskTypeException(input);
         }
-        System.out.println("added new task: " + taskList.get(taskList.size() - 1));
+        System.out.println("added new task " + taskList.size() + ": " + taskList.get(taskList.size() - 1));
         System.out.println("you've got " + taskList.size() + " tasks so far");
     }
     public static void main(String[] args) {
@@ -74,7 +87,9 @@ public class Sigmabot {
             try {
                 if (input.equals("bye")) break;
                 if (input.equals("list")) Sigmabot.viewTaskList();
-                else if (!Sigmabot.processMarkInput(input)) Sigmabot.processAddTaskInput(input);
+                else if (input.startsWith("mark ") || input.startsWith("unmark ")) Sigmabot.processMarkInput(input);
+                else if (input.startsWith("delete ")) Sigmabot.processDeleteInput(input);
+                else Sigmabot.processAddTaskInput(input);
             } catch (SigmabotException e) {
                 System.out.println("[!] " + e.getMessage());
             }

@@ -1,19 +1,19 @@
 hi! i'm your sigma bot. what's on your list?
 here goes your task list:
-added new task: [T][ ] borrow book
+added new task 1: [T][ ] borrow book
 you've got 1 tasks so far
 [!] This task type requires parameter /by
 here goes your task list:
 1: [T][ ] borrow book
-added new task: [D][ ] return book (by: Sunday)
+added new task 2: [D][ ] return book (by: Sunday)
 you've got 2 tasks so far
-added new task: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+added new task 3: [E][ ] project meeting (from: Mon 2pm to: 4pm)
 you've got 3 tasks so far
 here goes your task list:
 1: [T][ ] borrow book
 2: [D][ ] return book (by: Sunday)
 3: [E][ ] project meeting (from: Mon 2pm to: 4pm)
-added new task: [D][ ] do homework (by: no idea :-p)
+added new task 4: [D][ ] do homework (by: no idea :-p)
 you've got 4 tasks so far
 here goes your task list:
 1: [T][ ] borrow book
@@ -32,4 +32,17 @@ here goes your task list:
 2: [D][X] return book (by: Sunday)
 3: [E][ ] project meeting (from: Mon 2pm to: 4pm)
 4: [D][ ] do homework (by: no idea :-p)
+[!] Task numbered -1 does not exist.
+[!] Task numbered 123 does not exist.
+here goes your task list:
+1: [T][ ] borrow book
+2: [D][X] return book (by: Sunday)
+3: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+4: [D][ ] do homework (by: no idea :-p)
+removed task 2: [D][X] return book (by: Sunday)
+you've got 3 tasks so far
+here goes your task list:
+1: [T][ ] borrow book
+2: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+3: [D][ ] do homework (by: no idea :-p)
 see you soon!

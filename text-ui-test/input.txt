@@ -15,3 +15,8 @@ unmark 1
 list
 unmark 3
 list
+delete -1
+delete 123
+list
+delete 2
+list
