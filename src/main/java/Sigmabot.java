@@ -1,3 +1,6 @@
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -46,6 +49,14 @@ public class Sigmabot {
         tasks.remove(taskNumber);
         System.out.println("you've got " + tasks.taskCount() + " tasks so far");
     }
+    public static LocalDateTime parseDateTime(String dateTime) throws SigmabotInputException {
+        try {
+            return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        } catch (DateTimeException e) {
+            throw new SigmabotInputException("Incorrect date format: " + dateTime
+                    + ". Format for date should be yyyy-MM-dd HH:mm");
+        }
+    }
     public static void processAddTaskInput(String input) throws SigmabotException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
         var matcher = Pattern.compile(descriptionRegex).matcher(input);
@@ -56,7 +67,8 @@ public class Sigmabot {
             if (!matcherBy.find()) {
                 throw new MissingParameterInputException("by");
             }
-            tasks.add(new Deadline(description, matcherBy.group(1).trim()));
+            tasks.add(new Deadline(description,
+                    Sigmabot.parseDateTime(matcherBy.group(1).trim())));
         } else if (input.startsWith("event")) {
             var matcherFrom = Pattern.compile("/from([^/]*)").matcher(input);
             var matcherTo = Pattern.compile("/to([^/]*)").matcher(input);
@@ -66,7 +78,9 @@ public class Sigmabot {
             if (!matcherTo.find()) {
                 throw new MissingParameterInputException("to");
             }
-            tasks.add(new Event(description, matcherFrom.group(1).trim(), matcherTo.group(1).trim()));
+            tasks.add(new Event(description,
+                    Sigmabot.parseDateTime(matcherFrom.group(1).trim()),
+                    Sigmabot.parseDateTime(matcherTo.group(1).trim())));
         } else if (input.startsWith("todo")) {
             tasks.add(new ToDo(description));
         } else {

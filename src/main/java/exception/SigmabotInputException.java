@@ -1,7 +1,7 @@
 package exception;
 
 public class SigmabotInputException extends SigmabotException {
-    SigmabotInputException(String message) {
+    public SigmabotInputException(String message) {
         super(message);
     }
 }

@@ -2,9 +2,12 @@ import exception.SigmabotCorruptedDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+
 public final class Event extends Task {
-    String from, to;
-    public Event(String description, String from, String to) {
+    LocalDateTime from, to;
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
         this.to = to;
@@ -12,10 +15,13 @@ public final class Event extends Task {
     Event(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         super(taskJsonObject);
         try {
-            this.from = taskJsonObject.getString("from");
-            this.to = taskJsonObject.getString("to");
+            this.from = LocalDateTime.parse(taskJsonObject.getString("from"));
+            this.to = LocalDateTime.parse(taskJsonObject.getString("to"));
         } catch (JSONException e) {
             throw new SigmabotCorruptedDataException("could not access parameter for this task type "
+                    + e.getMessage());
+        } catch (DateTimeException e) {
+            throw new SigmabotCorruptedDataException("could not parse date time: "
                     + e.getMessage());
         }
     }
@@ -39,6 +45,7 @@ public final class Event extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString()
-                + " (from: " + this.from + " to: " + this.to + ")";
+                + " (from: " + Task.dateTimeToString(this.from)
+                + " to: " + Task.dateTimeToString(this.to) + ")";
     }
 }
