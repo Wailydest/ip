@@ -1,3 +1,4 @@
+import exception.SigmabotCorruptedDataException;
 import exception.SigmabotDataException;
 import exception.SigmabotException;
 import org.json.JSONArray;
@@ -41,7 +42,11 @@ public class TaskContainer {
         }
         taskList = new ArrayList<>();
         for (int i = 0; i < data.length(); ++i) {
-            taskList.add(Task.jsonToTask(data.getJSONObject(i)));
+            try {
+                taskList.add(Task.jsonToTask(data.getJSONObject(i)));
+            } catch (SigmabotCorruptedDataException e) {
+                System.err.println("Failed to load task: " + e.getMessage());
+            }
         }
     }
     private void storeData() throws SigmabotDataException {

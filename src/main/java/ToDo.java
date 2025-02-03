@@ -1,10 +1,11 @@
+import exception.SigmabotCorruptedDataException;
 import org.json.JSONObject;
 
 public final class ToDo extends Task {
     public ToDo(String description) {
         super(description);
     }
-    ToDo(JSONObject taskJsonObject) {
+    ToDo(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         super(taskJsonObject);
     }
     ToDo(ToDo t) {

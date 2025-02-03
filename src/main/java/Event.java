@@ -1,4 +1,4 @@
-import exception.SigmabotDataException;
+import exception.SigmabotCorruptedDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,13 +9,13 @@ public final class Event extends Task {
         this.from = from;
         this.to = to;
     }
-    Event(JSONObject taskJsonObject) throws SigmabotDataException {
+    Event(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         super(taskJsonObject);
         try {
             this.from = taskJsonObject.getString("from");
             this.to = taskJsonObject.getString("to");
         } catch (JSONException e) {
-            throw new SigmabotDataException("could not locate parameter for this task type "
+            throw new SigmabotCorruptedDataException("could not access parameter for this task type "
                     + e.getMessage());
         }
     }

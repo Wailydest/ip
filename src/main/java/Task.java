@@ -1,3 +1,4 @@
+import exception.SigmabotCorruptedDataException;
 import exception.SigmabotDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,9 +14,14 @@ public abstract class Task {
         this.description = description;
         this.isMarked = isMarked;
     }
-    protected Task(JSONObject taskJsonObject) {
-        this.description = taskJsonObject.getString("description");
-        this.isMarked = taskJsonObject.getBoolean("isMarked");
+    protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException{
+        try {
+            this.description = taskJsonObject.getString("description");
+            this.isMarked = taskJsonObject.getBoolean("isMarked");
+        } catch (JSONException e) {
+            throw new SigmabotCorruptedDataException("could not access parameter: "
+                    + e.getMessage());
+        }
     }
     protected Task(Task t) {
         this.description = t.description;
@@ -28,12 +34,12 @@ public abstract class Task {
         result.put("isMarked", isMarked);
         return result;
     }
-    public static Task jsonToTask(JSONObject taskJsonObject) throws SigmabotDataException {
+    public static Task jsonToTask(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         String type;
         try {
             type = taskJsonObject.getString("type");
         } catch (JSONException e) {
-            throw new SigmabotDataException("unable to identify the task type: " + e.getMessage());
+            throw new SigmabotCorruptedDataException("unable to identify the task type: " + e.getMessage());
         }
         if (type.equals("todo")) {
             return new ToDo(taskJsonObject);
@@ -42,7 +48,7 @@ public abstract class Task {
         } else if (type.equals("deadline")) {
             return new Event(taskJsonObject);
         }
-        throw new SigmabotDataException("type " + type + " could not be processed");
+        throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
     public Task mark() {
         Task copy = this.copy();

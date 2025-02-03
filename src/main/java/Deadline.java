@@ -1,4 +1,4 @@
-import exception.SigmabotDataException;
+import exception.SigmabotCorruptedDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,12 +8,12 @@ public final class Deadline extends Task {
         super(description);
         this.by = by;
     }
-    Deadline(JSONObject taskJsonObject) throws SigmabotDataException {
+    Deadline(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         super(taskJsonObject);
         try {
             this.by = taskJsonObject.getString("by");
         } catch (JSONException e) {
-            throw new SigmabotDataException("could not locate parameter for this task type "
+            throw new SigmabotCorruptedDataException("could not access parameter for this task type "
                     + e.getMessage());
         }
 
