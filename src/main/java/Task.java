@@ -3,6 +3,9 @@ import exception.SigmabotDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public abstract class Task {
     private final String description;
     private boolean isMarked;
@@ -46,7 +49,7 @@ public abstract class Task {
         } else if (type.equals("event")) {
             return new Event(taskJsonObject);
         } else if (type.equals("deadline")) {
-            return new Event(taskJsonObject);
+            return new Deadline(taskJsonObject);
         }
         throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
@@ -62,6 +65,9 @@ public abstract class Task {
     }
     public boolean getIsMarked() {
         return isMarked;
+    }
+    public static String dateTimeToString(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy ha"));
     }
     @Override
     public String toString() {

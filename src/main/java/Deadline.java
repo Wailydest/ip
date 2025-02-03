@@ -2,18 +2,24 @@ import exception.SigmabotCorruptedDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+
 public final class Deadline extends Task {
-    String by;
-    public Deadline(String description, String by) {
+    LocalDateTime by;
+    public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
     Deadline(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         super(taskJsonObject);
         try {
-            this.by = taskJsonObject.getString("by");
+            this.by = LocalDateTime.parse(taskJsonObject.getString("by"));
         } catch (JSONException e) {
             throw new SigmabotCorruptedDataException("could not access parameter for this task type "
+                    + e.getMessage());
+        } catch (DateTimeException e) {
+            throw new SigmabotCorruptedDataException("could not parse date time: "
                     + e.getMessage());
         }
 
@@ -35,6 +41,7 @@ public final class Deadline extends Task {
     }
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by + ")";
+        return "[D]" + super.toString()
+                + " (by: " + Task.dateTimeToString(this.by) + ")";
     }
 }
