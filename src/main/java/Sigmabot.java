@@ -1,18 +1,14 @@
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import exception.*;
 
 public class Sigmabot {
-    static ArrayList<Task> taskList;
+    static private TaskContainer tasks;
 
     public static void viewTaskList() {
         System.out.println("here goes your task list:");
-        for (int i = 0; i < taskList.size(); ++i) {
-            System.out.println(i + 1 + ": " + taskList.get(i).toString());
-        }
+        tasks.printTasks();
     }
     public static void processMarkInput(String input) throws SigmabotException {
         String[] inputParts = input.split("\\s+");
@@ -23,12 +19,15 @@ public class Sigmabot {
         } catch (NumberFormatException e) {
             throw new IncorrectMarkFormat(inputParts[0]);
         }
-        if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
+        if (taskNumber < 1 || taskNumber > Sigmabot.tasks.taskCount()) {
             throw new IncorrectTaskNumber(taskNumber);
         }
         --taskNumber;
-        if (inputParts[0].equals("mark")) taskList.get(taskNumber).mark();
-        else taskList.get(taskNumber).unmark();
+        if (inputParts[0].equals("mark")) {
+            tasks.editTask(taskNumber, tasks.getTask(taskNumber).mark());
+        } else {
+            tasks.editTask(taskNumber, tasks.getTask(taskNumber).unmark());
+        }
     }
     public static void processDeleteInput(String input) throws SigmabotException {
         String[] inputParts = input.split("\\s+");
@@ -39,13 +38,13 @@ public class Sigmabot {
         } catch (NumberFormatException e) {
             throw new IncorrectDeleteFormat();
         }
-        if (taskNumber < 1 || taskNumber > Sigmabot.taskList.size()) {
+        if (taskNumber < 1 || taskNumber > Sigmabot.tasks.taskCount()) {
             throw new IncorrectTaskNumber(taskNumber);
         }
         --taskNumber;
-        System.out.println("removed task " + (taskNumber + 1) + ": " + taskList.get(taskNumber));
-        taskList.remove(taskNumber);
-        System.out.println("you've got " + taskList.size() + " tasks so far");
+        System.out.println("removed task " + (taskNumber + 1) + ": " + tasks.getTask(taskNumber));
+        tasks.remove(taskNumber);
+        System.out.println("you've got " + tasks.taskCount() + " tasks so far");
     }
     public static void processAddTaskInput(String input) throws SigmabotException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
@@ -55,29 +54,29 @@ public class Sigmabot {
         if (input.startsWith("deadline")) {
             var matcherBy = Pattern.compile("/by([^/]*)").matcher(input);
             if (!matcherBy.find()) {
-                throw new MissingParameterException("by");
+                throw new MissingParameterInputException("by");
             }
-            taskList.add(new Deadline(description, matcherBy.group(1).trim()));
+            tasks.add(new Deadline(description, matcherBy.group(1).trim()));
         } else if (input.startsWith("event")) {
             var matcherFrom = Pattern.compile("/from([^/]*)").matcher(input);
             var matcherTo = Pattern.compile("/to([^/]*)").matcher(input);
             if (!matcherFrom.find()) {
-                throw new MissingParameterException("from");
+                throw new MissingParameterInputException("from");
             }
             if (!matcherTo.find()) {
-                throw new MissingParameterException("to");
+                throw new MissingParameterInputException("to");
             }
-            taskList.add(new Event(description, matcherFrom.group(1).trim(), matcherTo.group(1).trim()));
+            tasks.add(new Event(description, matcherFrom.group(1).trim(), matcherTo.group(1).trim()));
         } else if (input.startsWith("todo")) {
-            taskList.add(new ToDo(description));
+            tasks.add(new ToDo(description));
         } else {
-            throw new IncorrectTaskTypeException(input);
+            throw new IncorrectTaskTypeInputException(input);
         }
-        System.out.println("added new task " + taskList.size() + ": " + taskList.get(taskList.size() - 1));
-        System.out.println("you've got " + taskList.size() + " tasks so far");
+        System.out.println("added new task " + tasks.taskCount() + ": " + tasks.getTask(tasks.taskCount() - 1));
+        System.out.println("you've got " + tasks.taskCount() + " tasks so far");
     }
-    public static void main(String[] args) {
-        Sigmabot.taskList = new ArrayList<Task>();
+    public static void main(String[] args) throws SigmabotException {
+        Sigmabot.tasks = new TaskContainer();
 
         System.out.println("hi! i'm your sigma bot. what's on your list?");
 
@@ -90,7 +89,7 @@ public class Sigmabot {
                 else if (input.startsWith("mark ") || input.startsWith("unmark ")) Sigmabot.processMarkInput(input);
                 else if (input.startsWith("delete ")) Sigmabot.processDeleteInput(input);
                 else Sigmabot.processAddTaskInput(input);
-            } catch (SigmabotException e) {
+            } catch (SigmabotInputException e) {
                 System.out.println("[!] " + e.getMessage());
             }
         }

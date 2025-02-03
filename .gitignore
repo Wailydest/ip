@@ -16,5 +16,8 @@ bin/
 # java spectific binaries
 *.class
 
+# project data
+/data/
+
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT

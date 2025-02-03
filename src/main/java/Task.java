@@ -1,15 +1,58 @@
-public class Task {
-    private String description;
+import exception.SigmabotDataException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public abstract class Task {
+    private final String description;
     private boolean isMarked;
     public Task(String description) {
         this.description = description;
         this.isMarked = false;
     }
-    public void mark() {
-        this.isMarked = true;
+    public Task(String description, boolean isMarked) {
+        this.description = description;
+        this.isMarked = isMarked;
     }
-    public void unmark() {
-        this.isMarked = false;
+    protected Task(JSONObject taskJsonObject) {
+        this.description = taskJsonObject.getString("description");
+        this.isMarked = taskJsonObject.getBoolean("isMarked");
+    }
+    protected Task(Task t) {
+        this.description = t.description;
+        this.isMarked = t.isMarked;
+    }
+    protected abstract Task copy();
+    protected JSONObject toJson() {
+        var result = new JSONObject();
+        result.put("description", description);
+        result.put("isMarked", isMarked);
+        return result;
+    }
+    public static Task jsonToTask(JSONObject taskJsonObject) throws SigmabotDataException {
+        String type;
+        try {
+            type = taskJsonObject.getString("type");
+        } catch (JSONException e) {
+            throw new SigmabotDataException("unable to identify the task type: " + e.getMessage());
+        }
+        if (type.equals("todo")) {
+            return new ToDo(taskJsonObject);
+        } else if (type.equals("event")) {
+            return new Event(taskJsonObject);
+        } else if (type.equals("deadline")) {
+            return new Event(taskJsonObject);
+        }
+        throw new SigmabotDataException("type " + type + " could not be processed");
+    }
+    public Task mark() {
+        Task copy = this.copy();
+        copy.isMarked = true;
+        return copy;
+    }
+    public Task unmark() {
+        Task copy = this.copy();
+        copy.isMarked = false;
+        return copy;
     }
     public boolean getIsMarked() {
         return isMarked;
