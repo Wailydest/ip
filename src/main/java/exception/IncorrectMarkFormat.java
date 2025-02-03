@@ -1,6 +1,6 @@
 package exception;
 
-public class IncorrectMarkFormat extends SigmabotException {
+public class IncorrectMarkFormat extends SigmabotInputException {
     public IncorrectMarkFormat(String command) {
         super("Incorrect mark format. Use: " + command + " [task number]");
     }
