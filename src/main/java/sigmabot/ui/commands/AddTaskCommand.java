@@ -10,7 +10,7 @@ public final class AddTaskCommand extends Command {
     public AddTaskCommand(String input) throws SigmabotInputException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
         var matcher = Pattern.compile(descriptionRegex).matcher(input);
-        if (!matcher.find()) throw new UnknownCommandInputException(input);
+        if (!matcher.find()) throw new IncorrectTaskFormat(input);
         String description = matcher.group(1).trim();
         if (input.startsWith("deadline")) {
             var matcherBy = Pattern.compile("/by([^/]*)").matcher(input);
