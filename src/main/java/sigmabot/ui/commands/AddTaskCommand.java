@@ -41,4 +41,7 @@ public final class AddTaskCommand extends Command {
     public void executeOn(TaskContainer tasks) throws SigmabotDataException {
         tasks.add(task);
     }
+    public Task getTask() {
+        return task;
+    }
 }

@@ -39,8 +39,8 @@ public final class Event extends Task {
     @Override
     public JSONObject toJson() {
         var result =  super.toJson();
-        result.put("from", from);
-        result.put("to", to);
+        result.put("from", from.toString());
+        result.put("to", to.toString());
         result.put("type", "event");
         return result;
     }

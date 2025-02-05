@@ -26,4 +26,7 @@ public final class DeleteCommand extends Command {
         tasks.remove(taskNumber);
         System.out.println("you've got " + tasks.taskCount() + " tasks so far");
     }
+    public int getTaskNumber() {
+        return taskNumber;
+    }
 }

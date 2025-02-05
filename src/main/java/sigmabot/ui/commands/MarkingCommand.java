@@ -32,4 +32,10 @@ public final class MarkingCommand extends Command {
         System.out.println((this.toMark ? "marked" : "unmarked") + " task "
                 + (this.taskNumber + 1) + ": " + tasks.getTask(this.taskNumber));
     }
+    public int getTaskNumber() {
+        return this.taskNumber;
+    }
+    public boolean getToMark() {
+        return this.toMark;
+    }
 }

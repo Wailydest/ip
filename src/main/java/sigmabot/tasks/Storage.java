@@ -11,22 +11,27 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Storage {
-    private final static String DATA_DIR_NAME = "data";
-    private final static String DATA_FILE_NAME = "data.json";
-    private static Path getDataPath() throws SigmabotDataException {
+    private final String dataDirName;
+    private final String dataFileName;
+    private Path getDataPath() throws SigmabotDataException {
         Path currentDir = Paths.get("").toAbsolutePath();
-        Path dataDir = currentDir.resolve(DATA_DIR_NAME);
+        Path dataDir = currentDir.resolve(this.dataDirName);
         try {
             Files.createDirectories(dataDir);
         } catch (IOException e) {
             throw new SigmabotDataException("Failed to create data directory: " + e.getMessage());
         }
-        return dataDir.resolve(DATA_FILE_NAME);
+        return dataDir.resolve(this.dataFileName);
     }
-    static ArrayList<Task> load() throws SigmabotDataException {
-        Path dataFile = Storage.getDataPath();
+    Storage(String dataDirName, String dataFileName) {
+        this.dataDirName = dataDirName;
+        this.dataFileName = dataFileName;
+    }
+    public ArrayList<Task> load() throws SigmabotDataException {
+        Path dataFile = this.getDataPath();
         JSONArray data;
         if (Files.exists(dataFile)) {
             try {
@@ -48,20 +53,21 @@ public class Storage {
         }
         return taskList;
     }
-    static void storeData(TaskContainer tasks) throws SigmabotDataException {
+    public void storeData(List<Task> tasks) throws SigmabotDataException {
         JSONArray data = new JSONArray();
-        for (int i = 0; i < tasks.taskCount(); ++i) {
-            data.put(tasks.getTask(i).toJson());
+        for (Task task : tasks) {
+            data.put(task.toJson());
         }
-        Path dataFile = Storage.getDataPath();
+        Path dataFile = this.getDataPath();
         try {
             Files.writeString(dataFile,
                     data.toString(4),
                     StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING,
                     StandardOpenOption.SYNC);
         } catch (IOException e) {
-            throw new SigmabotDataException("unable to store data: " + e.getMessage());
+            throw new SigmabotDataException("unable to store data: " + e);
         }
     }
 }

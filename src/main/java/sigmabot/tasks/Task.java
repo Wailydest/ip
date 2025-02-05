@@ -68,7 +68,7 @@ public abstract class Task {
         return isMarked;
     }
     public static String dateTimeToString(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy ha"));
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
     }
     @Override
     public String toString() {

@@ -37,7 +37,7 @@ public final class Deadline extends Task {
     @Override
     public JSONObject toJson() {
         var result =  super.toJson();
-        result.put("by", by);
+        result.put("by", by.toString());
         result.put("type", "deadline");
         return result;
     }
