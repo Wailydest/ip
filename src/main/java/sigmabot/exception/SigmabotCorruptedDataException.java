@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class SigmabotCorruptedDataException extends SigmabotDataException {
     public SigmabotCorruptedDataException(String message) {

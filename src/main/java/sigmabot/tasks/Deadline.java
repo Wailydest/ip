@@ -1,6 +1,8 @@
-import exception.SigmabotCorruptedDataException;
+package sigmabot.tasks;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import sigmabot.exception.SigmabotCorruptedDataException;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;

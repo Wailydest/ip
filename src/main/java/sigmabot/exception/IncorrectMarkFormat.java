@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class IncorrectMarkFormat extends SigmabotInputException {
     public IncorrectMarkFormat(String command) {

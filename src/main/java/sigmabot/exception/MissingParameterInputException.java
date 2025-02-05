@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class MissingParameterInputException extends SigmabotInputException {
     public MissingParameterInputException(String parameter) {

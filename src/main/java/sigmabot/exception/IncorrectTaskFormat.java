@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class IncorrectTaskFormat extends SigmabotInputException {
     public IncorrectTaskFormat(String input) {

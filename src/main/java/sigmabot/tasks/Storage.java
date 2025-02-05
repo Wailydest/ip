@@ -1,20 +1,18 @@
-import exception.SigmabotCorruptedDataException;
-import exception.SigmabotDataException;
-import exception.SigmabotException;
+package sigmabot.tasks;
+
 import org.json.JSONArray;
-import org.json.JSONObject;
+import sigmabot.exception.SigmabotCorruptedDataException;
+import sigmabot.exception.SigmabotDataException;
 
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.nio.file.Path;
 
-public class TaskContainer {
-    private ArrayList<Task> taskList;
+public class Storage {
     private final static String DATA_DIR_NAME = "data";
     private final static String DATA_FILE_NAME = "data.json";
     private static Path getDataPath() throws SigmabotDataException {
@@ -27,8 +25,8 @@ public class TaskContainer {
         }
         return dataDir.resolve(DATA_FILE_NAME);
     }
-    public TaskContainer() throws SigmabotDataException {
-        Path dataFile = TaskContainer.getDataPath();
+    static ArrayList<Task> load() throws SigmabotDataException {
+        Path dataFile = Storage.getDataPath();
         JSONArray data;
         if (Files.exists(dataFile)) {
             try {
@@ -40,7 +38,7 @@ public class TaskContainer {
         } else {
             data = new JSONArray();
         }
-        taskList = new ArrayList<>();
+        ArrayList<Task> taskList = new ArrayList<>();
         for (int i = 0; i < data.length(); ++i) {
             try {
                 taskList.add(Task.jsonToTask(data.getJSONObject(i)));
@@ -48,13 +46,14 @@ public class TaskContainer {
                 System.err.println("Failed to load task: " + e.getMessage());
             }
         }
+        return taskList;
     }
-    private void storeData() throws SigmabotDataException {
+    static void storeData(TaskContainer tasks) throws SigmabotDataException {
         JSONArray data = new JSONArray();
-        for (var task : taskList) {
-            data.put(task.toJson());
+        for (int i = 0; i < tasks.taskCount(); ++i) {
+            data.put(tasks.getTask(i).toJson());
         }
-        Path dataFile = TaskContainer.getDataPath();
+        Path dataFile = Storage.getDataPath();
         try {
             Files.writeString(dataFile,
                     data.toString(4),
@@ -64,26 +63,5 @@ public class TaskContainer {
         } catch (IOException e) {
             throw new SigmabotDataException("unable to store data: " + e.getMessage());
         }
-    }
-    public void printTasks() {
-        for (int i = 0; i < taskList.size(); ++i) System.out.println((i + 1) + ": " + this.taskList.get(i));
-    }
-    public void add(Task task) throws SigmabotDataException {
-        taskList.add(task);
-        this.storeData();
-    }
-    public void editTask(int i, Task task) throws SigmabotDataException {
-        taskList.set(i, task);
-        this.storeData();
-    }
-    public Task getTask(int i) {
-        return taskList.get(i);
-    }
-    public void remove(int i) throws SigmabotDataException {
-        taskList.remove(i);
-        this.storeData();
-    }
-    public int taskCount() {
-        return taskList.size();
     }
 }

@@ -1,5 +1,6 @@
-import exception.SigmabotCorruptedDataException;
-import exception.SigmabotDataException;
+package sigmabot.tasks;
+
+import sigmabot.exception.SigmabotCorruptedDataException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
