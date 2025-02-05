@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class IncorrectDeleteFormat extends SigmabotInputException {
     public IncorrectDeleteFormat() {

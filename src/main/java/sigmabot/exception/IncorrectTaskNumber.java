@@ -1,4 +1,4 @@
-package exception;
+package sigmabot.exception;
 
 public class IncorrectTaskNumber extends SigmabotInputException {
     public IncorrectTaskNumber(int number) {
