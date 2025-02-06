@@ -24,9 +24,9 @@ public abstract class Command {
         if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
             return new AddTaskCommand(input);
         }
+        if (input.startsWith("find")) return new FindCommand(input);
         throw new UnknownCommandInputException(input);
     }
-
     /**
      * An abstract method that executes the command on the given TaskContainer object.
      *
