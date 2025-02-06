@@ -11,7 +11,7 @@ import sigmabot.tasks.TaskContainer;
  */
 public final class MarkingCommand extends Command {
     final private int taskNumber;
-    final private boolean toMark;
+    final private boolean isMarkingTask;
 
     /**
      * Constructs a new MarkingCommand object.
@@ -20,7 +20,7 @@ public final class MarkingCommand extends Command {
      *              Assumes the first word of the input is either mark or unmark
      * @throws IncorrectMarkFormat if the user input doesn't follow the mark/unmark command standard.
      */
-    MarkingCommand(String input) throws SigmabotInputException {
+    public MarkingCommand(String input) throws SigmabotInputException {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length != 2) throw new IncorrectMarkFormat(inputParts[0]);
         try {
@@ -28,7 +28,7 @@ public final class MarkingCommand extends Command {
         } catch (NumberFormatException e) {
             throw new IncorrectMarkFormat(inputParts[0]);
         }
-        this.toMark = inputParts[0].equals("mark");
+        this.isMarkingTask = inputParts[0].equals("mark");
     }
 
     @Override
@@ -36,12 +36,12 @@ public final class MarkingCommand extends Command {
         if (this.taskNumber < 0 || this.taskNumber >= tasks.taskCount()) {
             throw new IncorrectTaskNumber(this.taskNumber);
         }
-        if (this.toMark) {
+        if (this.isMarkingTask) {
             tasks.editTask(this.taskNumber, tasks.getTask(this.taskNumber).mark());
         } else {
             tasks.editTask(this.taskNumber, tasks.getTask(this.taskNumber).unmark());
         }
-        System.out.println((this.toMark ? "marked" : "unmarked") + " task "
+        System.out.println((this.isMarkingTask ? "marked" : "unmarked") + " task "
                 + (this.taskNumber + 1) + ": " + tasks.getTask(this.taskNumber));
     }
 
@@ -49,7 +49,7 @@ public final class MarkingCommand extends Command {
         return this.taskNumber;
     }
 
-    public boolean getToMark() {
-        return this.toMark;
+    public boolean getIsMarkingTask() {
+        return this.isMarkingTask;
     }
 }

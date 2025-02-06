@@ -25,7 +25,7 @@ public class CommandTest {
     public void parseShouldReturnMarkingCommandForMarkInput() throws SigmabotInputException {
         Command command = Command.parse("mark 1");
         assertInstanceOf(MarkingCommand.class, command);
-        assertTrue(((MarkingCommand) command).getToMark());
+        assertTrue(((MarkingCommand) command).getIsMarkingTask());
         assertEquals(0, ((MarkingCommand) command).getTaskNumber());
     }
 
@@ -33,7 +33,7 @@ public class CommandTest {
     public void parseShouldReturnMarkingCommandForUnmarkInput() throws SigmabotInputException {
         Command command = Command.parse("unmark 2");
         assertInstanceOf(MarkingCommand.class, command);
-        assertFalse(((MarkingCommand) command).getToMark());
+        assertFalse(((MarkingCommand) command).getIsMarkingTask());
         assertEquals(1, ((MarkingCommand) command).getTaskNumber());
     }
 

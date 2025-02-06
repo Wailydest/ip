@@ -33,12 +33,12 @@ public final class AddTaskCommand extends Command {
         if (!matcher.find()) throw new IncorrectTaskFormat(input);
         String description = matcher.group(1).trim();
         if (input.startsWith("deadline")) {
-            var matcherBy = Pattern.compile("/by([^/]*)").matcher(input);
-            if (!matcherBy.find()) {
+            var deadlineMatcherBy = Pattern.compile("/by([^/]*)").matcher(input);
+            if (!deadlineMatcherBy.find()) {
                 throw new MissingParameterInputException("by");
             }
             this.task = new Deadline(description,
-                    Ui.parseDateTime(matcherBy.group(1).trim()));
+                    Ui.parseDateTime(deadlineMatcherBy.group(1).trim()));
         } else if (input.startsWith("event")) {
             var matcherFrom = Pattern.compile("/from([^/]*)").matcher(input);
             var matcherTo = Pattern.compile("/to([^/]*)").matcher(input);
