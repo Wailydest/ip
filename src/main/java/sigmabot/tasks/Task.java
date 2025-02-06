@@ -1,24 +1,28 @@
 package sigmabot.tasks;
 
-import sigmabot.exception.SigmabotCorruptedDataException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import sigmabot.exception.SigmabotCorruptedDataException;
 
 public abstract class Task {
     private final String description;
     private boolean isMarked;
+
     public Task(String description) {
         this.description = description;
         this.isMarked = false;
     }
+
     public Task(String description, boolean isMarked) {
         this.description = description;
         this.isMarked = isMarked;
     }
-    protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException{
+
+    protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         try {
             this.description = taskJsonObject.getString("description");
             this.isMarked = taskJsonObject.getBoolean("isMarked");
@@ -27,17 +31,12 @@ public abstract class Task {
                     + e.getMessage());
         }
     }
+
     protected Task(Task t) {
         this.description = t.description;
         this.isMarked = t.isMarked;
     }
-    protected abstract Task copy();
-    protected JSONObject toJson() {
-        var result = new JSONObject();
-        result.put("description", description);
-        result.put("isMarked", isMarked);
-        return result;
-    }
+
     public static Task jsonToTask(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         String type;
         try {
@@ -54,22 +53,36 @@ public abstract class Task {
         }
         throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
+
+    public static String dateTimeToString(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
+    }
+
+    protected abstract Task copy();
+
+    protected JSONObject toJson() {
+        var result = new JSONObject();
+        result.put("description", description);
+        result.put("isMarked", isMarked);
+        return result;
+    }
+
     public Task mark() {
         Task copy = this.copy();
         copy.isMarked = true;
         return copy;
     }
+
     public Task unmark() {
         Task copy = this.copy();
         copy.isMarked = false;
         return copy;
     }
+
     public boolean getIsMarked() {
         return isMarked;
     }
-    public static String dateTimeToString(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
-    }
+
     @Override
     public String toString() {
         return "[" + (this.isMarked ? "X" : " ") + "] " + description;

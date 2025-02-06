@@ -17,6 +17,7 @@ public abstract class Command {
         }
         throw new UnknownCommandInputException(input);
     }
+
     public void executeOn(TaskContainer tasks) throws SigmabotException {
 
     }

@@ -1,9 +1,5 @@
 package sigmabot.tasks;
 
-import org.json.JSONArray;
-import sigmabot.exception.SigmabotCorruptedDataException;
-import sigmabot.exception.SigmabotDataException;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,9 +9,20 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+
+import sigmabot.exception.SigmabotCorruptedDataException;
+import sigmabot.exception.SigmabotDataException;
+
 public class Storage {
     private final String dataDirName;
     private final String dataFileName;
+
+    Storage(String dataDirName, String dataFileName) {
+        this.dataDirName = dataDirName;
+        this.dataFileName = dataFileName;
+    }
+
     private Path getDataPath() throws SigmabotDataException {
         Path currentDir = Paths.get("").toAbsolutePath();
         Path dataDir = currentDir.resolve(this.dataDirName);
@@ -26,10 +33,7 @@ public class Storage {
         }
         return dataDir.resolve(this.dataFileName);
     }
-    Storage(String dataDirName, String dataFileName) {
-        this.dataDirName = dataDirName;
-        this.dataFileName = dataFileName;
-    }
+
     public ArrayList<Task> load() throws SigmabotDataException {
         Path dataFile = this.getDataPath();
         JSONArray data;
@@ -53,6 +57,7 @@ public class Storage {
         }
         return taskList;
     }
+
     public void storeData(List<Task> tasks) throws SigmabotDataException {
         JSONArray data = new JSONArray();
         for (Task task : tasks) {

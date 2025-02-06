@@ -8,6 +8,7 @@ import sigmabot.tasks.TaskContainer;
 
 public final class DeleteCommand extends Command {
     private final int taskNumber;
+
     public DeleteCommand(String input) throws SigmabotInputException {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length != 2) throw new IncorrectDeleteFormat();
@@ -17,6 +18,7 @@ public final class DeleteCommand extends Command {
             throw new IncorrectDeleteFormat();
         }
     }
+
     @Override
     public void executeOn(TaskContainer tasks) throws SigmabotException {
         if (taskNumber < 0 || taskNumber >= tasks.taskCount()) {
@@ -26,6 +28,7 @@ public final class DeleteCommand extends Command {
         tasks.remove(taskNumber);
         System.out.println("you've got " + tasks.taskCount() + " tasks so far");
     }
+
     public int getTaskNumber() {
         return taskNumber;
     }
