@@ -13,6 +13,9 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class that handles the storage of tasks.
+ */
 public class Storage {
     private final String dataDirName;
     private final String dataFileName;
@@ -26,10 +29,23 @@ public class Storage {
         }
         return dataDir.resolve(this.dataFileName);
     }
-    Storage(String dataDirName, String dataFileName) {
+    /**
+     * Initializes the Storage object with the name of the data directory and the name of the data file.
+     *
+     * @param dataDirName the name of the directory where the data file is stored.
+     * @param dataFileName the name of the data file inside the data directory.
+     */
+    public Storage(String dataDirName, String dataFileName) {
         this.dataDirName = dataDirName;
         this.dataFileName = dataFileName;
     }
+    /**
+     * Loads the tasks from the data file.
+     * If the data is corrupted or does not follow the expected format, the corresponding task will be skipped.
+     *
+     * @return an ArrayList list of the tasks loaded from the data file.
+     * @throws SigmabotDataException if the data file cannot be read.
+     */
     public ArrayList<Task> load() throws SigmabotDataException {
         Path dataFile = this.getDataPath();
         JSONArray data;
@@ -53,6 +69,12 @@ public class Storage {
         }
         return taskList;
     }
+    /**
+     * Stores the tasks into the data file.
+     *
+     * @param tasks the list of tasks to store.
+     * @throws SigmabotDataException if the data file cannot be written.
+     */
     public void storeData(List<Task> tasks) throws SigmabotDataException {
         JSONArray data = new JSONArray();
         for (Task task : tasks) {

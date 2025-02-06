@@ -5,8 +5,18 @@ import sigmabot.ui.Ui;
 
 import java.util.regex.Pattern;
 
+/**
+ * Command to add a task to the task list.
+ */
 public final class AddTaskCommand extends Command {
     private final Task task;
+    /**
+     * Constructs a new AddTaskCommand object.
+     *
+     * @param input the user input that represents the task to add.
+     *              Assumes the first word of the input command is a valid task type.
+     * @throws SigmabotInputException if the user input is in an incorrect format.
+     */
     public AddTaskCommand(String input) throws SigmabotInputException {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
         var matcher = Pattern.compile(descriptionRegex).matcher(input);

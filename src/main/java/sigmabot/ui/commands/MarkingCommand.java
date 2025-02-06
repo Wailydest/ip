@@ -6,10 +6,20 @@ import sigmabot.exception.SigmabotException;
 import sigmabot.exception.SigmabotInputException;
 import sigmabot.tasks.TaskContainer;
 
+/**
+ * Command to mark or unmark a task in the task list.
+ */
 public final class MarkingCommand extends Command {
     final private int taskNumber;
     final private boolean toMark;
-    MarkingCommand(String input) throws SigmabotInputException {
+    /**
+     * Constructs a new MarkingCommand object.
+     *
+     * @param input the user input that represents the task to mark or unmark.
+     *              Assumes the first word of the input is either mark or unmark
+     * @throws IncorrectMarkFormat if the user input doesn't follow the mark/unmark command standard.
+     */
+    MarkingCommand(String input) throws IncorrectMarkFormat {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length != 2) throw new IncorrectMarkFormat(inputParts[0]);
         try {

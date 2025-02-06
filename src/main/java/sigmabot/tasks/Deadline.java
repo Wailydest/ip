@@ -7,8 +7,18 @@ import sigmabot.exception.SigmabotCorruptedDataException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
+/**
+ * A class encapsulating a Deadline task. Stores the deadline of the task.
+ */
 public final class Deadline extends Task {
     LocalDateTime by;
+
+    /**
+     * Initializes a Deadline object with the given description and deadline.
+     *
+     * @param description the description of the Deadline task.
+     * @param by the deadline of the task.
+     */
     public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;

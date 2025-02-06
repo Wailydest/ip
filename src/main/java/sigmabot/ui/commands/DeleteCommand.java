@@ -6,8 +6,17 @@ import sigmabot.exception.SigmabotException;
 import sigmabot.exception.SigmabotInputException;
 import sigmabot.tasks.TaskContainer;
 
+/**
+ * Command to delete a task from the task list.
+ */
 public final class DeleteCommand extends Command {
     private final int taskNumber;
+    /**
+     * Constructs a new DeleteCommand object.
+     *
+     * @param input the user input that represents the task to delete.
+     * @throws SigmabotInputException if the user input doesn't follow the delete command standard.
+     */
     public DeleteCommand(String input) throws SigmabotInputException {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length != 2) throw new IncorrectDeleteFormat();
