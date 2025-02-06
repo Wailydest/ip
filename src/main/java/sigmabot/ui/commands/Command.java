@@ -15,9 +15,9 @@ public abstract class Command {
         if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
             return new AddTaskCommand(input);
         }
+        if (input.startsWith("find")) return new FindCommand(input);
         throw new UnknownCommandInputException(input);
     }
     public void executeOn(TaskContainer tasks) throws SigmabotException {
-
     }
 }
