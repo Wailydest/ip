@@ -3,7 +3,15 @@ package sigmabot.tasks;
 import sigmabot.exception.SigmabotCorruptedDataException;
 import org.json.JSONObject;
 
+/**
+ * A class encapsulating a ToDo task. Doesn't have any additional fields.
+ */
 public final class ToDo extends Task {
+    /**
+     * Initializes a ToDo object with the given description.
+     *
+     * @param description the description of the ToDo task.
+     */
     public ToDo(String description) {
         super(description);
     }

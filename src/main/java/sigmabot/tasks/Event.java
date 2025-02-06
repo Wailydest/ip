@@ -7,8 +7,19 @@ import org.json.JSONObject;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
+/**
+ * A class encapsulating an Event task. Stores the start and end time of the event.
+ */
 public final class Event extends Task {
-    LocalDateTime from, to;
+    private final LocalDateTime from, to;
+
+    /**
+     * Initializes an Event object with the given description, start time and end time.
+     *
+     * @param description the description of the Event task.
+     * @param from the start time of the event.
+     * @param to the end time of the event.
+     */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
