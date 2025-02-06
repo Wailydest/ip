@@ -12,6 +12,7 @@ import sigmabot.tasks.TaskContainer;
 public final class MarkingCommand extends Command {
     final private int taskNumber;
     final private boolean toMark;
+
     /**
      * Constructs a new MarkingCommand object.
      *
@@ -19,7 +20,7 @@ public final class MarkingCommand extends Command {
      *              Assumes the first word of the input is either mark or unmark
      * @throws IncorrectMarkFormat if the user input doesn't follow the mark/unmark command standard.
      */
-    MarkingCommand(String input) throws IncorrectMarkFormat {
+    MarkingCommand(String input) throws SigmabotInputException {
         String[] inputParts = input.split("\\s+");
         if (inputParts.length != 2) throw new IncorrectMarkFormat(inputParts[0]);
         try {
@@ -29,6 +30,7 @@ public final class MarkingCommand extends Command {
         }
         this.toMark = inputParts[0].equals("mark");
     }
+
     @Override
     public void executeOn(TaskContainer tasks) throws SigmabotException {
         if (this.taskNumber < 0 || this.taskNumber >= tasks.taskCount()) {
@@ -42,9 +44,11 @@ public final class MarkingCommand extends Command {
         System.out.println((this.toMark ? "marked" : "unmarked") + " task "
                 + (this.taskNumber + 1) + ": " + tasks.getTask(this.taskNumber));
     }
+
     public int getTaskNumber() {
         return this.taskNumber;
     }
+
     public boolean getToMark() {
         return this.toMark;
     }

@@ -1,20 +1,21 @@
 package sigmabot.ui;
 
-import sigmabot.exception.SigmabotException;
-import sigmabot.exception.SigmabotInputException;
-import sigmabot.ui.commands.Command;
-import sigmabot.ui.commands.ExitCommand;
-
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+
+import sigmabot.exception.SigmabotException;
+import sigmabot.exception.SigmabotInputException;
+import sigmabot.ui.commands.Command;
+import sigmabot.ui.commands.ExitCommand;
 
 /**
  * Class for the UI interactions between the user and the SigmaBot application.
  */
 final public class Ui {
     private final Scanner scanner;
+
     /**
      * Constructs a new Ui object.
      */

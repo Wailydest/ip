@@ -1,7 +1,7 @@
 package sigmabot.ui;
 
+import sigmabot.exception.SigmabotException;
 import sigmabot.tasks.TaskContainer;
-import sigmabot.exception.*;
 
 /**
  * Main class for the SigmaBot application.
@@ -27,6 +27,6 @@ public class Sigmabot {
     public static void main(String[] args) throws SigmabotException {
         Sigmabot.tasks = new TaskContainer(DATA_DIR_NAME, DATA_FILE_NAME);
         Sigmabot.ui = new Ui();
-        while (ui.iteration());
+        while (ui.iteration()) ;
     }
 }

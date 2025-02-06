@@ -1,11 +1,12 @@
 package sigmabot.ui.commands;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
+
 import sigmabot.exception.SigmabotInputException;
 import sigmabot.exception.UnknownCommandInputException;
 import sigmabot.tasks.ToDo;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandTest {
     @Test

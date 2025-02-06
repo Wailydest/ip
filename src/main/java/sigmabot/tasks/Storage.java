@@ -1,9 +1,5 @@
 package sigmabot.tasks;
 
-import org.json.JSONArray;
-import sigmabot.exception.SigmabotCorruptedDataException;
-import sigmabot.exception.SigmabotDataException;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,12 +9,29 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+
+import sigmabot.exception.SigmabotCorruptedDataException;
+import sigmabot.exception.SigmabotDataException;
+
 /**
  * A class that handles the storage of tasks.
  */
 public class Storage {
     private final String dataDirName;
     private final String dataFileName;
+
+    /**
+     * Initializes the Storage object with the name of the data directory and the name of the data file.
+     *
+     * @param dataDirName  the name of the directory where the data file is stored.
+     * @param dataFileName the name of the data file inside the data directory.
+     */
+    public Storage(String dataDirName, String dataFileName) {
+        this.dataDirName = dataDirName;
+        this.dataFileName = dataFileName;
+    }
+
     private Path getDataPath() throws SigmabotDataException {
         Path currentDir = Paths.get("").toAbsolutePath();
         Path dataDir = currentDir.resolve(this.dataDirName);
@@ -29,16 +42,7 @@ public class Storage {
         }
         return dataDir.resolve(this.dataFileName);
     }
-    /**
-     * Initializes the Storage object with the name of the data directory and the name of the data file.
-     *
-     * @param dataDirName the name of the directory where the data file is stored.
-     * @param dataFileName the name of the data file inside the data directory.
-     */
-    public Storage(String dataDirName, String dataFileName) {
-        this.dataDirName = dataDirName;
-        this.dataFileName = dataFileName;
-    }
+
     /**
      * Loads the tasks from the data file.
      * If the data is corrupted or does not follow the expected format, the corresponding task will be skipped.
@@ -69,6 +73,7 @@ public class Storage {
         }
         return taskList;
     }
+
     /**
      * Stores the tasks into the data file.
      *

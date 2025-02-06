@@ -1,15 +1,25 @@
 package sigmabot.ui.commands;
-import sigmabot.exception.*;
-import sigmabot.tasks.*;
-import sigmabot.ui.Ui;
 
 import java.util.regex.Pattern;
+
+import sigmabot.exception.IncorrectTaskFormat;
+import sigmabot.exception.MissingParameterInputException;
+import sigmabot.exception.SigmabotDataException;
+import sigmabot.exception.SigmabotInputException;
+import sigmabot.exception.UnknownCommandInputException;
+import sigmabot.tasks.Deadline;
+import sigmabot.tasks.Event;
+import sigmabot.tasks.Task;
+import sigmabot.tasks.TaskContainer;
+import sigmabot.tasks.ToDo;
+import sigmabot.ui.Ui;
 
 /**
  * Command to add a task to the task list.
  */
 public final class AddTaskCommand extends Command {
     private final Task task;
+
     /**
      * Constructs a new AddTaskCommand object.
      *
@@ -47,10 +57,12 @@ public final class AddTaskCommand extends Command {
             throw new UnknownCommandInputException(input);
         }
     }
+
     @Override
     public void executeOn(TaskContainer tasks) throws SigmabotDataException {
         tasks.add(task);
     }
+
     public Task getTask() {
         return task;
     }

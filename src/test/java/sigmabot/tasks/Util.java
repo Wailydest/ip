@@ -1,14 +1,15 @@
 package sigmabot.tasks;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 public class Util {
     public static final String DATA_DIR_NAME = "testDataDir";
     public static final String DATA_FILE_NAME = "testDataFile.json";
+
     public static void clearTestFile() {
         try {
             Files.delete(java.nio.file.Paths.get(DATA_DIR_NAME, DATA_FILE_NAME));
@@ -16,6 +17,7 @@ public class Util {
             fail("Failed to delete test file: " + e.getMessage());
         }
     }
+
     public static ArrayList<Task> generateTasks() {
         ArrayList<Task> tasks = new ArrayList<Task>();
         tasks.add(new Event("event 1",

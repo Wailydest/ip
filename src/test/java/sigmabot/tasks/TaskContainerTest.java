@@ -1,12 +1,13 @@
 package sigmabot.tasks;
 
-import org.junit.jupiter.api.Test;
-import sigmabot.exception.SigmabotDataException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
+
+import sigmabot.exception.SigmabotDataException;
 
 public class TaskContainerTest {
     @Test
@@ -36,6 +37,7 @@ public class TaskContainerTest {
             fail();
         }
     }
+
     @Test
     public void taskContainerLoadTasksFromFileTest() {
         Util.clearTestFile();

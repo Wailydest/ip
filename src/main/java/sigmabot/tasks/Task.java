@@ -1,24 +1,33 @@
 package sigmabot.tasks;
 
-import sigmabot.exception.SigmabotCorruptedDataException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import sigmabot.exception.SigmabotCorruptedDataException;
 
 /**
  * A class encapsulating a task concept.
  * Each task instance is supposed to be immutable.
  */
+
 public abstract class Task {
     private final String description;
     private boolean isMarked;
-    protected Task(String description) {
+
+    public Task(String description) {
         this.description = description;
         this.isMarked = false;
     }
-    protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException{
+
+    public Task(String description, boolean isMarked) {
+        this.description = description;
+        this.isMarked = isMarked;
+    }
+
+    protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         try {
             this.description = taskJsonObject.getString("description");
             this.isMarked = taskJsonObject.getBoolean("isMarked");
@@ -27,22 +36,12 @@ public abstract class Task {
                     + e.getMessage());
         }
     }
+
     protected Task(Task t) {
         this.description = t.description;
         this.isMarked = t.isMarked;
     }
-    protected abstract Task copy();
-    /**
-     * Converts the task to a JSON object.
-     *
-     * @return the JSON object representing the task.
-     */
-    public JSONObject toJson() {
-        var result = new JSONObject();
-        result.put("description", description);
-        result.put("isMarked", isMarked);
-        return result;
-    }
+
     /**
      * Converts a JSON object to a Task object.
      * The format is supposed to be the same as the one produced by the toJson method.
@@ -67,6 +66,25 @@ public abstract class Task {
         }
         throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
+
+    protected static String dateTimeToString(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
+    }
+
+    protected abstract Task copy();
+
+    /**
+     * Converts the task to a JSON object.
+     *
+     * @return the JSON object representing the task.
+     */
+    public JSONObject toJson() {
+        var result = new JSONObject();
+        result.put("description", description);
+        result.put("isMarked", isMarked);
+        return result;
+    }
+
     /**
      * Marks the task as done.
      *
@@ -88,13 +106,11 @@ public abstract class Task {
         copy.isMarked = false;
         return copy;
     }
+
     public boolean getIsMarked() {
         return isMarked;
     }
-    protected static String dateTimeToString(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
-    }
-    @Override
+
     public String toString() {
         return "[" + (this.getIsMarked() ? "X" : " ") + "] " + description;
     }

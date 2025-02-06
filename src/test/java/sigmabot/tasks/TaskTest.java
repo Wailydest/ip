@@ -1,15 +1,14 @@
 package sigmabot.tasks;
 
-import org.json.JSONObject;
-import org.junit.jupiter.api.Test;
-import sigmabot.exception.SigmabotCorruptedDataException;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.time.LocalDateTime;
+
+import org.json.JSONObject;
+import org.junit.jupiter.api.Test;
+
+import sigmabot.exception.SigmabotCorruptedDataException;
 
 public class TaskTest {
     @Test
