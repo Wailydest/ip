@@ -34,5 +34,5 @@ public abstract class Command {
      *              For some commands the contents of the TaskContainer object may be modified.
      * @throws SigmabotException if an error occurs while executing the command.
      */
-    public abstract void executeOn(TaskContainer tasks) throws SigmabotException;
+    public abstract String executeOn(TaskContainer tasks) throws SigmabotException;
 }

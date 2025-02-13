@@ -28,12 +28,13 @@ public class FindCommand extends Command {
      * @param tasks The task container to find tasks in.
      */
     @Override
-    public void executeOn(TaskContainer tasks) {
-        System.out.println("Here are the matching tasks in your list:");
+    public String executeOn(TaskContainer tasks) {
+        StringBuilder output = new StringBuilder("Here are the matching tasks in your list:\n");
         for (int i = 0; i < tasks.taskCount(); i++) {
             if (tasks.getTask(i).toString().contains(keyword)) {
-                System.out.println((i + 1) + ": " + tasks.getTask(i).toString());
+                output.append((i + 1)).append(": ").append(tasks.getTask(i).toString()).append("\n");
             }
         }
+        return output.toString();
     }
 }

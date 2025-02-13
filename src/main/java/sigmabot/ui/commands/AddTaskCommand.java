@@ -12,7 +12,7 @@ import sigmabot.tasks.Event;
 import sigmabot.tasks.Task;
 import sigmabot.tasks.TaskContainer;
 import sigmabot.tasks.ToDo;
-import sigmabot.ui.Ui;
+import sigmabot.ui.Util;
 
 /**
  * Command to add a task to the task list.
@@ -38,7 +38,7 @@ public final class AddTaskCommand extends Command {
                 throw new MissingParameterInputException("by");
             }
             this.task = new Deadline(description,
-                    Ui.parseDateTime(deadlineMatcherBy.group(1).trim()));
+                    Util.parseDateTime(deadlineMatcherBy.group(1).trim()));
         } else if (input.startsWith("event")) {
             var matcherFrom = Pattern.compile("/from([^/]*)").matcher(input);
             var matcherTo = Pattern.compile("/to([^/]*)").matcher(input);
@@ -49,8 +49,8 @@ public final class AddTaskCommand extends Command {
                 throw new MissingParameterInputException("to");
             }
             this.task = new Event(description,
-                    Ui.parseDateTime(matcherFrom.group(1).trim()),
-                    Ui.parseDateTime(matcherTo.group(1).trim()));
+                    Util.parseDateTime(matcherFrom.group(1).trim()),
+                    Util.parseDateTime(matcherTo.group(1).trim()));
         } else if (input.startsWith("todo")) {
             this.task = new ToDo(description);
         } else {
@@ -59,8 +59,10 @@ public final class AddTaskCommand extends Command {
     }
 
     @Override
-    public void executeOn(TaskContainer tasks) throws SigmabotDataException {
+    public String executeOn(TaskContainer tasks) throws SigmabotDataException {
         tasks.add(task);
+        return "Got it. I've added this task:\n" + task
+                + "\nNow you have " + tasks.taskCount() + " tasks in the list.";
     }
 
     public Task getTask() {
