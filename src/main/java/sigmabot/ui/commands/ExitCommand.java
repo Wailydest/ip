@@ -7,7 +7,8 @@ import sigmabot.tasks.TaskContainer;
  */
 public class ExitCommand extends Command {
     @Override
-    public void executeOn(TaskContainer tasks) {
-        // Do nothing
+    public String executeOn(TaskContainer tasks) {
+        System.exit(0);
+        return "";
     }
 }

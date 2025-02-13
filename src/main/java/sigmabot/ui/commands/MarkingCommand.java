@@ -32,7 +32,7 @@ public final class MarkingCommand extends Command {
     }
 
     @Override
-    public void executeOn(TaskContainer tasks) throws SigmabotException {
+    public String executeOn(TaskContainer tasks) throws SigmabotException {
         if (this.taskNumber < 0 || this.taskNumber >= tasks.taskCount()) {
             throw new IncorrectTaskNumber(this.taskNumber);
         }
@@ -41,8 +41,8 @@ public final class MarkingCommand extends Command {
         } else {
             tasks.editTask(this.taskNumber, tasks.getTask(this.taskNumber).unmark());
         }
-        System.out.println((this.isMarkingTask ? "marked" : "unmarked") + " task "
-                + (this.taskNumber + 1) + ": " + tasks.getTask(this.taskNumber));
+        return (this.isMarkingTask ? "marked" : "unmarked") + " task "
+                + (this.taskNumber + 1) + ": " + tasks.getTask(this.taskNumber);
     }
 
     public int getTaskNumber() {

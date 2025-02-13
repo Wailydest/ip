@@ -27,13 +27,6 @@ public class TaskContainer {
     }
 
     /**
-     * Prints all the tasks in the task list.
-     */
-    public void printTasks() {
-        for (int i = 0; i < taskList.size(); ++i) System.out.println((i + 1) + ": " + this.taskList.get(i));
-    }
-
-    /**
      * Adds a task to the task list.
      *
      * @param task the task to add.
@@ -84,5 +77,14 @@ public class TaskContainer {
      */
     public int taskCount() {
         return taskList.size();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < taskList.size(); ++i) {
+            sb.append((i + 1)).append(": ").append(taskList.get(i)).append("\n");
+        }
+        return sb.toString();
     }
 }

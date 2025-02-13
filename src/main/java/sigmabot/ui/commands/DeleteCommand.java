@@ -29,13 +29,14 @@ public final class DeleteCommand extends Command {
     }
 
     @Override
-    public void executeOn(TaskContainer tasks) throws SigmabotException {
+    public String executeOn(TaskContainer tasks) throws SigmabotException {
         if (taskNumber < 0 || taskNumber >= tasks.taskCount()) {
             throw new IncorrectTaskNumber(taskNumber);
         }
-        System.out.println("removed task " + (taskNumber + 1) + ": " + tasks.getTask(taskNumber));
+        String output = "removed task " + (taskNumber + 1) + ": " + tasks.getTask(taskNumber);
         tasks.remove(taskNumber);
-        System.out.println("you've got " + tasks.taskCount() + " tasks so far");
+        output += "you've got " + tasks.taskCount() + " tasks so far";
+        return output;
     }
 
     public int getTaskNumber() {
