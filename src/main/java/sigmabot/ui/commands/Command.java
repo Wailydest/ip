@@ -27,11 +27,13 @@ public abstract class Command {
         if (input.startsWith("find")) return new FindCommand(input);
         throw new UnknownCommandInputException(input);
     }
+
     /**
      * An abstract method that executes the command on the given TaskContainer object.
      *
      * @param tasks the TaskContainer object to execute the command on.
      *              For some commands the contents of the TaskContainer object may be modified.
+     * @return a string that represents the output to be displayed.
      * @throws SigmabotException if an error occurs while executing the command.
      */
     public abstract String executeOn(TaskContainer tasks) throws SigmabotException;

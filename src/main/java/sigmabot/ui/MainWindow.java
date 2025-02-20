@@ -28,7 +28,9 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /**
+     * Injects the Duke instance
+     */
     public void setSigmabot(Sigmabot s) {
         sigmabot = s;
         dialogContainer.getChildren().addAll(
