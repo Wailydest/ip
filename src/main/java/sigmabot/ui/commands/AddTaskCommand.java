@@ -54,7 +54,8 @@ public final class AddTaskCommand extends Command {
         } else if (input.startsWith("todo")) {
             this.task = new ToDo(description);
         } else {
-            throw new UnknownCommandInputException(input);
+            this.task = null;
+            assert false : "The check for validity of the task type must've been performed earlier";
         }
     }
 
