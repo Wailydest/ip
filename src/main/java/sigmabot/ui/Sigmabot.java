@@ -61,6 +61,7 @@ public class Sigmabot {
             System.out.println(getResponse(input));
         }
     }
+
     public String getGreeting() {
         return "hi! i'm your sigma bot. what's on your list?";
     }
