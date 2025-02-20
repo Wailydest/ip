@@ -32,7 +32,7 @@ public class Sigmabot {
     }
 
     /**
-     * Pass input to Sigmabot and get reponse.
+     * Passes input to Sigmabot and get reponse.
      */
     public String getResponse(String input) {
         try {
@@ -49,7 +49,7 @@ public class Sigmabot {
     }
 
     /**
-     * Accept one line of user console input and execute the corresponding command,
+     * Accepts one line of user console input and execute the corresponding command,
      * printing to output back to the command line
      */
     public void cmdInteraction() {

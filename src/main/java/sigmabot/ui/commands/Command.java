@@ -33,6 +33,7 @@ public abstract class Command {
      *
      * @param tasks the TaskContainer object to execute the command on.
      *              For some commands the contents of the TaskContainer object may be modified.
+     * @return a string that represents the output to be displayed.
      * @throws SigmabotException if an error occurs while executing the command.
      */
     public abstract String executeOn(TaskContainer tasks) throws SigmabotException;
