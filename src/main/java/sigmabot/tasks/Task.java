@@ -68,6 +68,13 @@ public abstract class Task {
         throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
 
+    /**
+     * Extracts the argument from the task creation command.
+     *
+     * @param command the command to extract the argument from.
+     * @param argument the string value of the argument to extract from.
+     * @return the value of the argument if found.
+     */
     protected static Optional<String> extractArgument(String command, String argument) {
         var matcher = Pattern.compile("/" + argument + "([^/]*)").matcher(command);
         if (!matcher.find()) {
@@ -76,6 +83,15 @@ public abstract class Task {
         return Optional.of(matcher.group(1).trim());
     }
 
+    /**
+     * Extracts the description of the task from the command.
+     * The description is considered to be the part from the task type to
+     * either the first occurrence of '/' or the end of the string.
+     *
+     * @param command the command to extract the description from.
+     * @return the description of the task.
+     * @throws IncorrectTaskFormat if the description couldn't be extracted
+     */
     private static String extractDescription(String command) throws IncorrectTaskFormat {
         String descriptionRegex = "^[a-z]+\\s([^/]+)";
         var matcher = Pattern.compile(descriptionRegex).matcher(command);
@@ -83,6 +99,13 @@ public abstract class Task {
         return matcher.group(1).trim();
     }
 
+    /**
+     * A factory method that parses a user input string into a Task object.
+     * @param command the user input string to parse. Assumes the first word of
+     *                the input command is a valid task type.
+     * @return an appropriate Task object that corresponds to the user input.
+     * @throws IncorrectTaskFormat if the user input is in an incorrect format.
+     */
     public static Task commandToTask(String command) throws IncorrectTaskFormat {
         String[] commandParts = command.split(" ", 2);
         String type = commandParts[0];

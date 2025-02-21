@@ -16,6 +16,11 @@ import sigmabot.exception.SigmabotCorruptedDataException;
 public final class Deadline extends Task {
     private final LocalDateTime dueDateTime;
 
+    /**
+     * Constructs a Deadline task from a command string.
+     *
+     * @throws IncorrectTaskFormat if the command string is in the wrong format.
+     */
     public Deadline(String command) throws IncorrectTaskFormat {
         super(command);
         try {

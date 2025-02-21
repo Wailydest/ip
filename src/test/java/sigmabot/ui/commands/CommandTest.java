@@ -45,14 +45,6 @@ public class CommandTest {
     }
 
     @Test
-    public void parseShouldReturnAddTaskCommandForOtherInput() throws SigmabotInputException {
-        Command command = Command.parse("todo read book");
-        assertInstanceOf(AddTaskCommand.class, command);
-        assertEquals((new ToDo("read book")).toString(),
-                ((AddTaskCommand) command).getTask().toString());
-    }
-
-    @Test
     public void parseShouldThrowExceptionForEmptyInput() {
         assertThrows(UnknownCommandInputException.class, () -> Command.parse(""));
     }

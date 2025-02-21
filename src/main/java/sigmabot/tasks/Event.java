@@ -14,8 +14,13 @@ import sigmabot.exception.SigmabotCorruptedDataException;
  * A class encapsulating an Event task. Stores the start and end time of the event.
  */
 public final class Event extends Task {
-    private LocalDateTime from, to;
+    private final LocalDateTime from, to;
 
+    /**
+     * Constructs an Event task from a command string.
+     *
+     * @throws IncorrectTaskFormat if the command string is in the wrong format.
+     */
     public Event(String command) throws IncorrectTaskFormat {
         super(command);
         try {
