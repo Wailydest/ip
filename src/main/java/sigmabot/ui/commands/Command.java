@@ -25,8 +25,10 @@ public abstract class Command {
             return new AddTaskCommand(input);
         }
         if (input.startsWith("find")) return new FindCommand(input);
+        if (input.startsWith("tag") || input.startsWith("untag")) return new TaggingCommand(input);
         throw new UnknownCommandInputException(input);
     }
+
     /**
      * An abstract method that executes the command on the given TaskContainer object.
      *

@@ -2,6 +2,7 @@ package sigmabot.tasks;
 
 import org.json.JSONObject;
 
+import sigmabot.exception.IncorrectTaskFormat;
 import sigmabot.exception.SigmabotCorruptedDataException;
 
 /**
@@ -13,7 +14,7 @@ public final class ToDo extends Task {
      *
      * @param description the description of the ToDo task.
      */
-    public ToDo(String description) {
+    public ToDo(String description) throws IncorrectTaskFormat {
         super(description);
     }
 

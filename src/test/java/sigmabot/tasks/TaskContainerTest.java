@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import sigmabot.exception.IncorrectTaskFormat;
 import sigmabot.exception.SigmabotDataException;
 
 public class TaskContainerTest {
     @Test
-    public void taskContainerStoreAndModifyTasksTest() {
+    public void taskContainerStoreAndModifyTasksTest() throws IncorrectTaskFormat {
         Util.clearTestFile();
         try {
             TaskContainer taskContainer = new TaskContainer(Util.DATA_DIR_NAME, Util.DATA_FILE_NAME);
@@ -39,7 +40,7 @@ public class TaskContainerTest {
     }
 
     @Test
-    public void taskContainerLoadTasksFromFileTest() {
+    public void taskContainerLoadTasksFromFileTest() throws IncorrectTaskFormat {
         Util.clearTestFile();
         ArrayList<Task> tasks = Util.generateTasks();
         Storage storage = new Storage(Util.DATA_DIR_NAME, Util.DATA_FILE_NAME);

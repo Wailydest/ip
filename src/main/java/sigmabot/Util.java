@@ -1,4 +1,4 @@
-package sigmabot.ui;
+package sigmabot;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -17,12 +17,7 @@ final public class Util {
      * @return the LocalDateTime object representing the date time string.
      * @throws SigmabotInputException if the date time string is in an incorrect format.
      */
-    public static LocalDateTime parseDateTime(String dateTime) throws SigmabotInputException {
-        try {
-            return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        } catch (DateTimeException e) {
-            throw new SigmabotInputException("Incorrect date format: " + dateTime
-                    + ". Format for date should be yyyy-MM-dd HH:mm");
-        }
+    public static LocalDateTime parseDateTime(String dateTime) throws DateTimeException {
+        return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

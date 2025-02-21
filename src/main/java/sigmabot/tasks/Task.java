@@ -2,10 +2,13 @@ package sigmabot.tasks;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sigmabot.exception.IncorrectTaskFormat;
 import sigmabot.exception.SigmabotCorruptedDataException;
 
 /**
@@ -16,21 +19,18 @@ import sigmabot.exception.SigmabotCorruptedDataException;
 public abstract class Task {
     private final String description;
     private boolean isMarked;
+    private String tag;
 
-    public Task(String description) {
-        this.description = description;
-        this.isMarked = false;
-    }
-
-    public Task(String description, boolean isMarked) {
-        this.description = description;
-        this.isMarked = isMarked;
+    protected Task(String command) throws IncorrectTaskFormat {
+        this.description = Task.extractDescription(command);
+        this.tag = Task.extractArgument(command, "tag").orElse("");
     }
 
     protected Task(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
         try {
             this.description = taskJsonObject.getString("description");
             this.isMarked = taskJsonObject.getBoolean("isMarked");
+            this.tag = taskJsonObject.getString("tag");
         } catch (JSONException e) {
             throw new SigmabotCorruptedDataException("could not access parameter: "
                     + e.getMessage());
@@ -40,6 +40,7 @@ public abstract class Task {
     protected Task(Task t) {
         this.description = t.description;
         this.isMarked = t.isMarked;
+        this.tag = t.tag;
     }
 
     /**
@@ -67,6 +68,34 @@ public abstract class Task {
         throw new SigmabotCorruptedDataException("type " + type + " could not be processed");
     }
 
+    protected static Optional<String> extractArgument(String command, String argument) {
+        var matcher = Pattern.compile("/" + argument + "([^/]*)").matcher(command);
+        if (!matcher.find()) {
+            return Optional.empty();
+        }
+        return Optional.of(matcher.group(1).trim());
+    }
+
+    private static String extractDescription(String command) throws IncorrectTaskFormat {
+        String descriptionRegex = "^[a-z]+\\s([^/]+)";
+        var matcher = Pattern.compile(descriptionRegex).matcher(command);
+        if (!matcher.find()) throw new IncorrectTaskFormat(command);
+        return matcher.group(1).trim();
+    }
+
+    public static Task commandToTask(String command) throws IncorrectTaskFormat {
+        String[] commandParts = command.split(" ", 2);
+        String type = commandParts[0];
+        if (type.equals("todo")) {
+            return new ToDo(command);
+        } else if (type.equals("event")) {
+            return new Event(command);
+        } else {
+            assert type.equals("deadline") : "Invalid task type: the check for validity of the task type must've been performed earlier";
+            return new Deadline(command);
+        }
+    }
+
     protected static String dateTimeToString(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mma"));
     }
@@ -80,8 +109,9 @@ public abstract class Task {
      */
     public JSONObject toJson() {
         var result = new JSONObject();
-        result.put("description", description);
-        result.put("isMarked", isMarked);
+        result.put("description", this.description);
+        result.put("isMarked", this.isMarked);
+        result.put("tag", this.tag);
         return result;
     }
 
@@ -93,6 +123,18 @@ public abstract class Task {
     public Task mark() {
         Task copy = this.copy();
         copy.isMarked = true;
+        return copy;
+    }
+
+    /**
+     * Sets the tag of the task.
+     *
+     * @param tag The tag to set.
+     * @return a copy of the task with the tag field set to the given tag.
+     */
+    public Task setTag(String tag) {
+        Task copy = this.copy();
+        copy.tag = tag;
         return copy;
     }
 
@@ -112,6 +154,7 @@ public abstract class Task {
     }
 
     public String toString() {
-        return "[" + (this.getIsMarked() ? "X" : " ") + "] " + description;
+        return "[" + (this.getIsMarked() ? "X" : " ") + "] "
+                + description + (tag.isEmpty() ? "" : " #" + tag);
     }
 }

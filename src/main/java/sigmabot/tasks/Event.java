@@ -6,25 +6,29 @@ import java.time.LocalDateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sigmabot.Util;
+import sigmabot.exception.IncorrectTaskFormat;
 import sigmabot.exception.SigmabotCorruptedDataException;
 
 /**
  * A class encapsulating an Event task. Stores the start and end time of the event.
  */
 public final class Event extends Task {
-    private final LocalDateTime from, to;
+    private LocalDateTime from, to;
 
-    /**
-     * Initializes an Event object with the given description, start time and end time.
-     *
-     * @param description the description of the Event task.
-     * @param from        the start time of the event.
-     * @param to          the end time of the event.
-     */
-    public Event(String description, LocalDateTime from, LocalDateTime to) {
-        super(description);
-        this.from = from;
-        this.to = to;
+    public Event(String command) throws IncorrectTaskFormat {
+        super(command);
+        try {
+            this.from = Task.extractArgument(command, "from")
+                    .map(Util::parseDateTime)
+                    .orElseThrow(() -> new IncorrectTaskFormat("Missing 'from' parameter"));
+            this.to = Task.extractArgument(command, "to")
+                    .map(Util::parseDateTime)
+                    .orElseThrow(() -> new IncorrectTaskFormat("Missing 'to' parameter"));
+        } catch (DateTimeException e) {
+            throw new IncorrectTaskFormat("Incorrect date format: " + e.getMessage()
+                    + ". Format for date should be yyyy-MM-dd HH:mm");
+        }
     }
 
     Event(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {
