@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sigmabot.Util;
+import sigmabot.exception.IncorrectTaskFormat;
 import sigmabot.exception.SigmabotCorruptedDataException;
 
 /**
@@ -14,15 +16,16 @@ import sigmabot.exception.SigmabotCorruptedDataException;
 public final class Deadline extends Task {
     private final LocalDateTime dueDateTime;
 
-    /**
-     * Initializes a Deadline object with the given description and deadline.
-     *
-     * @param description the description of the Deadline task.
-     * @param by          the deadline of the task.
-     */
-    public Deadline(String description, LocalDateTime by) {
-        super(description);
-        this.dueDateTime = by;
+    public Deadline(String command) throws IncorrectTaskFormat {
+        super(command);
+        try {
+            this.dueDateTime = Task.extractArgument(command, "by")
+                    .map(Util::parseDateTime)
+                    .orElseThrow(() -> new IncorrectTaskFormat("Missing 'by' parameter"));
+        } catch (DateTimeException e) {
+            throw new IncorrectTaskFormat("Incorrect date format: " + e.getMessage()
+                    + ". Format for date should be yyyy-MM-dd HH:mm");
+        }
     }
 
     Deadline(JSONObject taskJsonObject) throws SigmabotCorruptedDataException {

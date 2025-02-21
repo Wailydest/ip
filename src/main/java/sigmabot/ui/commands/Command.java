@@ -25,6 +25,7 @@ public abstract class Command {
             return new AddTaskCommand(input);
         }
         if (input.startsWith("find")) return new FindCommand(input);
+        if (input.startsWith("tag") || input.startsWith("untag")) return new TaggingCommand(input);
         throw new UnknownCommandInputException(input);
     }
 
