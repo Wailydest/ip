@@ -199,4 +199,4 @@ Here are the matching tasks in your list:
 
 # Got any feedback?
 
-Loved Sigmabot? Hated it? We'd be desperate to hear from you. Feel free to open an issue anytime you feel so!
+Loved Sigmabot? Hated it? We'd be desperate to hear from you. Feel free to open an issue anytime you wish so!
