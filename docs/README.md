@@ -1,6 +1,6 @@
 # Sigmabot User Guide
 
-![product image](Ui.png)
+<img src="Ui.png" width="300">
 
 A brand new intuitive CLI-friendly chat empowering users to keep notes and organize tasks.
 
