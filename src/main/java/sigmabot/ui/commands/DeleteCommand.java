@@ -33,7 +33,7 @@ public final class DeleteCommand extends Command {
         if (taskNumber < 0 || taskNumber >= tasks.taskCount()) {
             throw new IncorrectTaskNumber(taskNumber);
         }
-        String output = "removed task " + (taskNumber + 1) + ": " + tasks.getTask(taskNumber);
+        String output = "removed task " + (taskNumber + 1) + ": " + tasks.getTask(taskNumber) + "\n";
         tasks.remove(taskNumber);
         output += "you've got " + tasks.taskCount() + " tasks so far";
         return output;
