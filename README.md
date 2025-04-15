@@ -21,4 +21,4 @@ This project was implemented as a compulsory component of the NUS CS2019S module
 
 ## Acknowledgements
 
-GitHub Copilot – for providing code suggestions during development and quality checks in pull requests <a href="https://github.com/features/copilot">[Website]</a>.
+GitHub Copilot – for providing code suggestions during the development stage <a href="https://github.com/features/copilot">[Website]</a>.
